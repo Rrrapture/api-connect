@@ -1,0 +1,25 @@
+product: '1.0.0'
+
+info:
+  name: api-connect
+  title: api-connect
+  version: 1.0.0
+
+apis:
+  'api-connect':
+    $ref: api-connect.yaml
+
+visibility:
+  view:
+    type: public
+  subscribe:
+    type: authenticated
+
+plans:
+  default:
+    title: Default Plan
+    description: Default Plan
+    approval: false
+    rate-limit:
+      value: 100/hour
+      hard-limit: false
