@@ -10,7 +10,13 @@
 *.swp
 *.tgz
 *.xml
+*.zip
 .DS_Store
+Thumbs.db
+.tmp/
+tmp/
+workspace.xml
+webResources.xml
 .idea
 .project
 .strong-pm
