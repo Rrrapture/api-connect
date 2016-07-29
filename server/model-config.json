@@ -15,5 +15,9 @@
   },
   "Note": {
     "dataSource": "db"
+  },
+  "hero": {
+    "dataSource": "db",
+    "public": true
   }
 }

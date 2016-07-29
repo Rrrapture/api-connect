@@ -1,53 +1,3 @@
-swagger: '2.0'
-
-info:
-  x-ibm-name: api-connect
-  version: 1.0.0
-  title: api-connect
-
-schemes:
-  - https
-host: $(catalog.host)
-basePath: /api
-
-consumes:
-  - application/json
-produces:
-  - application/json
-
-securityDefinitions:
- clientIdHeader:
-   type: apiKey
-   in: header
-   name: X-IBM-Client-Id
- clientSecretHeader:
-   in: "header"
-   name: "X-IBM-Client-Secret"
-   type: "apiKey"
-
-
-security:
- -
-   clientIdHeader: []
-   clientSecretHeader: []
-
-x-ibm-configuration:
-  testable: true
-  enforced: true
-  cors:
-    enabled: true
-  catalogs:
-    apic-dev:
-      properties:
-        runtime-url: $(TARGET_URL)
-    sb:
-      properties:
-        runtime-url: 'http://localhost:4001'
-  assembly:
-    execute:
-      - invoke:
-          target-url: $(runtime-url)$(request.path)$(request.search)
-
 paths:
   /Notes:
     post:
@@ -284,8 +234,241 @@ paths:
                 type: number
                 format: double
       deprecated: false
-
-
+  /heroes:
+    post:
+      tags:
+        - hero
+      summary: Create a new instance of the model and persist it into the data source.
+      operationId: hero.create
+      parameters:
+        - name: data
+          in: body
+          description: Model instance data
+          required: false
+          schema:
+            $ref: '#/definitions/hero'
+      responses:
+        '200':
+          description: Request was successful
+          schema:
+            $ref: '#/definitions/hero'
+      deprecated: false
+    put:
+      tags:
+        - hero
+      summary: Update an existing model instance or insert a new one into the data source.
+      operationId: hero.upsert
+      parameters:
+        - name: data
+          in: body
+          description: Model instance data
+          required: false
+          schema:
+            $ref: '#/definitions/hero'
+      responses:
+        '200':
+          description: Request was successful
+          schema:
+            $ref: '#/definitions/hero'
+      deprecated: false
+    get:
+      tags:
+        - hero
+      summary: Find all instances of the model matched by filter from the data source.
+      operationId: hero.find
+      parameters:
+        - name: filter
+          in: query
+          description: 'Filter defining fields, where, include, order, offset, and limit'
+          required: false
+          type: string
+          format: JSON
+      responses:
+        '200':
+          description: Request was successful
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/hero'
+      deprecated: false
+  '/heroes/{id}/exists':
+    get:
+      tags:
+        - hero
+      summary: Check whether a model instance exists in the data source.
+      operationId: 'hero.exists__get_heroes_{id}_exists'
+      parameters:
+        - name: id
+          in: path
+          description: Model id
+          required: true
+          type: string
+          format: JSON
+      responses:
+        '200':
+          description: Request was successful
+          schema:
+            type: object
+            properties:
+              exists:
+                type: boolean
+      deprecated: false
+  '/heroes/{id}':
+    head:
+      tags:
+        - hero
+      summary: Check whether a model instance exists in the data source.
+      operationId: 'hero.exists__head_heroes_{id}'
+      parameters:
+        - name: id
+          in: path
+          description: Model id
+          required: true
+          type: string
+          format: JSON
+      responses:
+        '200':
+          description: Request was successful
+          schema:
+            type: object
+            properties:
+              exists:
+                type: boolean
+      deprecated: false
+    get:
+      tags:
+        - hero
+      summary: Find a model instance by id from the data source.
+      operationId: hero.findById
+      parameters:
+        - name: id
+          in: path
+          description: Model id
+          required: true
+          type: string
+          format: JSON
+        - name: filter
+          in: query
+          description: Filter defining fields and include
+          required: false
+          type: string
+          format: JSON
+      responses:
+        '200':
+          description: Request was successful
+          schema:
+            $ref: '#/definitions/hero'
+      deprecated: false
+    delete:
+      tags:
+        - hero
+      summary: Delete a model instance by id from the data source.
+      operationId: hero.deleteById
+      parameters:
+        - name: id
+          in: path
+          description: Model id
+          required: true
+          type: string
+          format: JSON
+      responses:
+        '200':
+          description: Request was successful
+          schema:
+            type: object
+      deprecated: false
+    put:
+      tags:
+        - hero
+      summary: Update attributes for a model instance and persist it into the data source.
+      operationId: hero.prototype.updateAttributes
+      parameters:
+        - name: data
+          in: body
+          description: An object of model property name/value pairs
+          required: false
+          schema:
+            $ref: '#/definitions/hero'
+        - name: id
+          in: path
+          description: PersistedModel id
+          required: true
+          type: string
+          format: JSON
+      responses:
+        '200':
+          description: Request was successful
+          schema:
+            $ref: '#/definitions/hero'
+      deprecated: false
+  /heroes/findOne:
+    get:
+      tags:
+        - hero
+      summary: Find first instance of the model matched by filter from the data source.
+      operationId: hero.findOne
+      parameters:
+        - name: filter
+          in: query
+          description: 'Filter defining fields, where, include, order, offset, and limit'
+          required: false
+          type: string
+          format: JSON
+      responses:
+        '200':
+          description: Request was successful
+          schema:
+            $ref: '#/definitions/hero'
+      deprecated: false
+  /heroes/update:
+    post:
+      tags:
+        - hero
+      summary: Update instances of the model matched by where from the data source.
+      operationId: hero.updateAll
+      parameters:
+        - name: where
+          in: query
+          description: Criteria to match model instances
+          required: false
+          type: string
+          format: JSON
+        - name: data
+          in: body
+          description: An object of model property name/value pairs
+          required: false
+          schema:
+            $ref: '#/definitions/hero'
+      responses:
+        '200':
+          description: Request was successful
+          schema:
+            description: The number of instances updated
+            type: object
+      deprecated: false
+  /heroes/count:
+    get:
+      tags:
+        - hero
+      summary: Count instances of the model matched by where from the data source.
+      operationId: hero.count
+      parameters:
+        - name: where
+          in: query
+          description: Criteria to match model instances
+          required: false
+          type: string
+          format: JSON
+      responses:
+        '200':
+          description: Request was successful
+          schema:
+            type: object
+            properties:
+              count:
+                type: number
+                format: double
+      deprecated: false
 definitions:
   Note:
     properties:
@@ -301,4 +484,56 @@ definitions:
     additionalProperties: false
   x-any:
     properties: {}
-
+  hero:
+    properties:
+      id:
+        type: number
+        format: double
+      name:
+        type: string
+      power:
+        type: string
+    required:
+      - name
+    additionalProperties: false
+swagger: '2.0'
+info:
+  x-ibm-name: api-connect
+  version: 1.0.0
+  title: api-connect
+schemes:
+  - https
+host: $(catalog.host)
+basePath: /api
+consumes:
+  - application/json
+produces:
+  - application/json
+securityDefinitions:
+  clientIdHeader:
+    type: apiKey
+    in: header
+    name: X-IBM-Client-Id
+  clientSecretHeader:
+    in: header
+    name: X-IBM-Client-Secret
+    type: apiKey
+security:
+  - clientIdHeader: []
+    clientSecretHeader: []
+x-ibm-configuration:
+  testable: true
+  enforced: true
+  cors:
+    enabled: true
+  catalogs:
+    apic-dev:
+      properties:
+        runtime-url: $(TARGET_URL)
+    sb:
+      properties:
+        runtime-url: 'http://localhost:4001'
+  assembly:
+    execute:
+      - invoke:
+          target-url: $(runtime-url)$(request.path)$(request.search)
